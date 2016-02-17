@@ -124,7 +124,6 @@ def breadthFirstSearch(problem):
 
     while len(pila) != 0:
         nodo, acciones, costo = pila.pop()
-        print("Nodo es: %s" % (nodo,))
 
         if problem.isGoalState(nodo):
             return acciones
@@ -134,9 +133,6 @@ def breadthFirstSearch(problem):
             for hijo, accion, costo_h in problem.getSuccessors(nodo):
                 nuevo = (hijo, acciones+[accion], costo+costo_h)
                 pila.insert(0,nuevo)
-            print "%s InicioPila %s"%("-"*30,"-"*30)
-            for elem in pila: print elem
-            print "%s FinPila %s"%("-"*30,"-"*30)
 
     return []
 
