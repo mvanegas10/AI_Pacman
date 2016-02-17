@@ -107,6 +107,8 @@ def depthFirstSearch(problem):
                 nuevo = (hijo, acciones+[accion], costo+costo_h)
                 pila.push(nuevo)
 
+    print "%s DFS no puede solucionar el ejercicio: Se acabo la pila %s" % ("*"*30,"*"*30)
+
     return []
 
     util.raiseNotDefined()
@@ -122,6 +124,7 @@ def breadthFirstSearch(problem):
 
     pila.append(start)
 
+
     while len(pila) != 0:
         nodo, acciones, costo = pila.pop()
 
@@ -134,6 +137,8 @@ def breadthFirstSearch(problem):
                 nuevo = (hijo, acciones+[accion], costo+costo_h)
                 pila.insert(0,nuevo)
 
+    print "%s BFS no puede solucionar el ejercicio: Se acabo la pila %s" % ("*"*30,"*"*30)
+
     return []
 
     util.raiseNotDefined()
@@ -141,6 +146,26 @@ def breadthFirstSearch(problem):
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
+    cola_prioritaria = util.PriorityQueue()
+    nodos_explorados = list() #Lista que guarda los nodos explorados
+
+    cola_prioritaria.push((problem.getStartState(),[]), 0) #Se agrega la tupla donde se encuentra el pacman
+
+    while not cola_prioritaria.isEmpty(): #Si la cola no esta vacia
+        nodo, acciones  = cola_prioritaria.pop()  #Se asigna el nodo eliminado de la cola prioritaria
+
+        if problem.isGoalState(nodo): #Si el nodo es el objetivo se retorna la accion
+            return acciones
+
+        nodos_explorados.append(nodo)
+
+        for hijo, accion, costo_h in problem.getSuccessors(nodo):
+            if hijo not in nodos_explorados: #Si el nodo no esta en el nodo explorado
+                cola_prioritaria.push((hijo, acciones + [accion]), problem.getCostOfActions(acciones + [accion]))#Se agrega hijo a la cola
+
+
+    return []
+
     util.raiseNotDefined()
 
 def nullHeuristic(state, problem=None):
@@ -153,6 +178,26 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
+    Abiertas = problem.getStartState();
+    Cerradas = list()
+    cola_prioritaria = util.PriorityQueue()
+
+    cola_prioritaria.push((Abiertas, []), heuristic(Abiertas,problem))
+
+    while not cola_prioritaria.isEmpty():
+        nodo, acciones = cola_prioritaria.pop()
+
+        if problem.isGoalState(nodo):
+            return acciones
+
+        Cerradas.append(nodo)
+
+        for hijo, accion, costo_h in problem.getSuccessors(nodo):
+            if hijo not in Cerradas:
+                cola_prioritaria.push((hijo, acciones + [accion]), problem.getCostOfActions(acciones + [accion]) + heuristic(hijo, problem))
+
+
+    return []
     util.raiseNotDefined()
 
 
