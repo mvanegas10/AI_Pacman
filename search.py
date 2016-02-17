@@ -4,7 +4,7 @@
 # educational purposes provided that (1) you do not distribute or publish
 # solutions, (2) you retain this notice, and (3) you provide clear
 # attribution to UC Berkeley, including a link to http://ai.berkeley.edu.
-# 
+#
 # Attribution Information: The Pacman AI projects were developed at UC Berkeley.
 # The core projects and autograders were primarily created by John DeNero
 # (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
@@ -87,11 +87,59 @@ def depthFirstSearch(problem):
     print "Start's successors:", problem.getSuccessors(problem.getStartState())
     """
     "*** YOUR CODE HERE ***"
+
+    pila = util.Stack()
+    explorador = list()
+
+    start = (problem.getStartState(),[],0)
+
+    pila.push(start)
+
+    while not pila.isEmpty():
+        nodo, acciones, costo = pila.pop()
+
+        if problem.isGoalState(nodo):
+            return acciones
+
+        if nodo not in explorador:
+            explorador.append(nodo)
+            for hijo, accion, costo_h in problem.getSuccessors(nodo):
+                nuevo = (hijo, acciones+[accion], costo+costo_h)
+                pila.push(nuevo)
+
+    return []
+
     util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
+
+    pila = []
+    explorador = list()
+
+    start = (problem.getStartState(),[],0)
+
+    pila.append(start)
+
+    while len(pila) != 0:
+        nodo, acciones, costo = pila.pop()
+        print("Nodo es: %s" % (nodo,))
+
+        if problem.isGoalState(nodo):
+            return acciones
+
+        if nodo not in explorador:
+            explorador.append(nodo)
+            for hijo, accion, costo_h in problem.getSuccessors(nodo):
+                nuevo = (hijo, acciones+[accion], costo+costo_h)
+                pila.insert(0,nuevo)
+            print "%s InicioPila %s"%("-"*30,"-"*30)
+            for elem in pila: print elem
+            print "%s FinPila %s"%("-"*30,"-"*30)
+
+    return []
+
     util.raiseNotDefined()
 
 def uniformCostSearch(problem):
